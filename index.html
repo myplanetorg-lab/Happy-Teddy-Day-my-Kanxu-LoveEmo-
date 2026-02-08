@@ -3,118 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Teddy Day Love!</title>
+    <title>Happy Teddy Day!</title>
     <style>
+        :root {
+            --primary-pink: #ffafbd;
+            --dark-pink: #ff385c;
+        }
+
         body {
             margin: 0;
             padding: 0;
-            background: #ffe4e1; /* Soft pink */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #ffafbd, #ffc3a0);
+            height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
             overflow: hidden;
+            color: white;
             text-align: center;
         }
 
         h1 {
-            color: #d63384;
             font-size: 3rem;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.1);
             margin-bottom: 20px;
-            z-index: 10;
         }
 
         #magicButton {
             padding: 15px 30px;
             font-size: 1.2rem;
-            background-color: #ff69b4;
+            background-color: var(--dark-pink);
             color: white;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-            z-index: 10;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            z-index: 100;
         }
 
         #magicButton:hover {
             transform: scale(1.1);
-            background-color: #ff1493;
+            background-color: #e03152;
         }
 
-        .bear-pop {
+        .bear-image {
             position: absolute;
             width: 200px;
             height: 200px;
             object-fit: cover;
             border-radius: 15px;
             border: 5px solid white;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            animation: popOut 1.5s ease-out forwards;
-            z-index: 5;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            animation: fadeInOut 2s ease-in-out forwards;
+            z-index: 50;
         }
 
-        @keyframes popOut {
-            0% { transform: scale(0) rotate(-20deg); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: scale(1.2) rotate(10deg); opacity: 0; }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+            20% { opacity: 1; transform: scale(1) rotate(0deg); }
+            80% { opacity: 1; transform: scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: scale(0.5) rotate(10deg); }
         }
     </style>
 </head>
 <body>
 
-    <h1>Happy Teddy Day, my love! 🧸</h1>
-    <button id="magicButton">Wanna see a magic trick?</button>
+    <div id="content">
+        <h1>Happy Teddy Day my love! 🧸</h1>
+        <p>I know you don't like physical teddies, so I made you a digital world of them.</p>
+        <button id="magicButton">Wanna see a magic trick?</button>
+    </div>
 
     <script>
         const btn = document.getElementById('magicButton');
+        const searchTerms = ['teddybear', 'bearcub', 'panda', 'redpanda', 'polarbear'];
         
-        // Keywords for the "100 types"
-        const bearTypes = ['teddybear', 'bearcub', 'panda', 'polarbear', 'koala'];
+        btn.addEventListener('click', () => {
+            btn.style.display = 'none'; // Hide button after click
+            document.querySelector('h1').innerText = "Look at all the fluff!";
+            
+            let count = 0;
+            const interval = setInterval(() => {
+                if (count >= 100) {
+                    clearInterval(interval);
+                    document.querySelector('h1').innerText = "Happy Teddy Day, Beautiful!";
+                    return;
+                }
+
+                createBear();
+                count++;
+            }, 1000); // New bear every 1 second (total 100 seconds)
+        });
 
         function createBear() {
             const img = document.createElement('img');
-            const randomType = bearTypes[Math.floor(Math.random() * bearTypes.length)];
-            const randomId = Math.floor(Math.random() * 1000);
+            const randomTerm = searchTerms[Math.floor(Math.random() * searchTerms.length)];
             
-            // Using Unsplash source for high quality cute bears
-            img.src = `https://source.unsplash.com/featured/?${randomType}&sig=${randomId}`;
-            img.classList.add('bear-pop');
+            // Using Unsplash source to get random images based on keywords
+            img.src = `https://source.unsplash.com/random/400x400/?${randomTerm}&sig=${Math.random()}`;
+            img.className = 'bear-image';
 
-            // Random position on screen
+            // Random positioning
             const x = Math.random() * (window.innerWidth - 200);
             const y = Math.random() * (window.innerHeight - 200);
-            
+
             img.style.left = `${x}px`;
             img.style.top = `${y}px`;
 
             document.body.appendChild(img);
 
-            // Clean up the DOM after animation finishes
+            // Remove from DOM after animation finishes to keep site light
             setTimeout(() => {
                 img.remove();
-            }, 1500);
+            }, 2000);
         }
-
-        btn.addEventListener('click', () => {
-            btn.style.display = 'none'; // Hide button after click
-            
-            let count = 0;
-            const interval = setInterval(() => {
-                createBear();
-                count++;
-                
-                // Stop after 100 images
-                if (count >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        document.querySelector('h1').innerText = "You're my favorite teddy! ❤️";
-                    }, 2000);
-                }
-            }, 1000); // One new bear every second for 100 seconds
-        });
     </script>
 </body>
 </html>
