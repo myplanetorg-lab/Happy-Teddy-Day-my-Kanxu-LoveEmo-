@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Teddy Day!</title>
+    <title>Teddy Day Magic</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            /* Replace 'bg.jpg' with your actual background image filename */
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -20,92 +24,89 @@
             text-align: center;
         }
 
-        #content-wrapper {
+        .container {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
             z-index: 10;
             max-width: 80%;
         }
 
-        h1 { font-size: 3rem; margin-bottom: 10px; }
-        p { font-size: 1.2rem; }
+        h1 { font-size: 2.8rem; margin-bottom: 10px; }
 
         #magicButton {
-            padding: 20px 40px;
-            font-size: 1.5rem;
+            padding: 18px 35px;
+            font-size: 1.3rem;
             background-color: #ff385c;
             color: white;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             transition: 0.3s;
         }
 
-        #magicButton:hover { transform: scale(1.1); }
+        #magicButton:hover { transform: scale(1.05); background-color: #ff4d6d; }
 
-        /* Larger Image Styling */
+        /* Larger images */
         .bear {
             position: absolute;
-            width: 350px; /* Increased size */
-            height: 350px;
+            width: 600px; /* Increased size */
+            height: 600px;
             object-fit: cover;
-            border-radius: 20px;
+            border-radius: 15px;
             border: 8px solid white;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-            animation: popOut 2.5s ease-in-out forwards;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            animation: popAndFade 3s ease-in-out forwards;
             pointer-events: none;
         }
 
-        @keyframes popOut {
+        @keyframes popAndFade {
             0% { transform: scale(0) rotate(-15deg); opacity: 0; }
-            20% { transform: scale(1.1) rotate(0deg); opacity: 1; }
-            80% { transform: scale(1.1) rotate(0deg); opacity: 1; }
-            100% { transform: scale(0.8) rotate(15deg); opacity: 0; }
+            20% { transform: scale(1) rotate(0deg); opacity: 1; }
+            80% { transform: scale(1) rotate(0deg); opacity: 1; }
+            100% { transform: scale(1.1) rotate(10deg); opacity: 0; }
         }
 
         #finalMessage {
             display: none;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            border-radius: 20px;
-            border: 2px solid white;
-            animation: fadeIn 2s ease-in;
+            font-size: 1.5rem;
+            line-height: 1.6;
+            animation: fadeIn 5s;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div id="content-wrapper">
-        <div id="intro">
-            <h1>Happy Teddy Day my love! 🧸</h1>
-            <p>I know you aren't a fan of physical bears, so I made you something else...</p>
-            <button id="magicButton" onclick="startMagic()">Wanna see a magic trick?</button>
-        </div>
-
+    <div class="container" id="mainBox">
+        <h1 id="title">Happy Teddy Day my love! 🧸</h1>
+        <button id="magicButton" onclick="startMagic()">Wanna see a magic trick?</button>
         <div id="finalMessage">
-            <h1>To My Riya ...</h1>
-            <p>I hope these 100 bears brought a smile to your face. You might not like the fluffy ones you have to keep on a shelf, but I hope you liked these and me. You're my favorite "bear" to hug, today and every day. Happy Teddy Day!</p>
+            <p>My Riya, I know you're not a fan of physical teddy bears taking up space...</p>
+            <p>So I wanted to give you 20 digital ones that will only take up space in your heart. 
+               You're cuter than any bear I could ever find. I love you! ❤️</p>
         </div>
     </div>
 
     <script>
         function startMagic() {
-            const intro = document.getElementById('intro');
+            const btn = document.getElementById('magicButton');
+            const title = document.getElementById('title');
             const finalMessage = document.getElementById('finalMessage');
-            intro.style.display = 'none';
+            
+            btn.style.display = 'none';
+            title.style.display = 'none';
             
             let count = 1;
-            const totalImages = 100;
-            
+            const totalImages = 20;
+
             const magicInterval = setInterval(() => {
                 if (count > totalImages) {
                     clearInterval(magicInterval);
-                    // Show message after the last image starts to fade
+                    // Show thoughtful message after all images have appeared
                     setTimeout(() => {
                         finalMessage.style.display = 'block';
                     }, 2000);
@@ -113,24 +114,23 @@
                 }
                 
                 const img = document.createElement('img');
-                
-                // This pulls images/1.jpg, images/2.jpg, etc.
-                img.src = `images/${count}.jpg`; 
+                // This assumes your images are named 1.jpg, 2.jpg, etc.
+                img.src = `${count}.jpg`; 
                 img.className = 'bear';
                 
                 // Random position logic
-                const x = Math.random() * (window.innerWidth - 350);
-                const y = Math.random() * (window.innerHeight - 350);
+                const x = Math.random() * (window.innerWidth - 320);
+                const y = Math.random() * (window.innerHeight - 320);
                 
                 img.style.left = x + 'px';
                 img.style.top = y + 'px';
                 
                 document.body.appendChild(img);
                 
-                // Cleanup
-                setTimeout(() => img.remove(), 2500);
+                // Remove image after it fades out
+                setTimeout(() => img.remove(), 3000);
                 count++;
-            }, 1000); // 1 image every second
+            }, 1500); // Images appear every 1.5 seconds
         }
     </script>
 </body>
