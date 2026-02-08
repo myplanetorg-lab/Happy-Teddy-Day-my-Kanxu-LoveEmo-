@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Teddy Day Love!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #ffe4e1; /* Soft pink */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        h1 {
+            color: #d63384;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            z-index: 10;
+        }
+
+        #magicButton {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background-color: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+            z-index: 10;
+        }
+
+        #magicButton:hover {
+            transform: scale(1.1);
+            background-color: #ff1493;
+        }
+
+        .bear-pop {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 5px solid white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            animation: popOut 1.5s ease-out forwards;
+            z-index: 5;
+        }
+
+        @keyframes popOut {
+            0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: scale(1.2) rotate(10deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Happy Teddy Day, my love! 🧸</h1>
+    <button id="magicButton">Wanna see a magic trick?</button>
+
+    <script>
+        const btn = document.getElementById('magicButton');
+        
+        // Keywords for the "100 types"
+        const bearTypes = ['teddybear', 'bearcub', 'panda', 'polarbear', 'koala'];
+
+        function createBear() {
+            const img = document.createElement('img');
+            const randomType = bearTypes[Math.floor(Math.random() * bearTypes.length)];
+            const randomId = Math.floor(Math.random() * 1000);
+            
+            // Using Unsplash source for high quality cute bears
+            img.src = `https://source.unsplash.com/featured/?${randomType}&sig=${randomId}`;
+            img.classList.add('bear-pop');
+
+            // Random position on screen
+            const x = Math.random() * (window.innerWidth - 200);
+            const y = Math.random() * (window.innerHeight - 200);
+            
+            img.style.left = `${x}px`;
+            img.style.top = `${y}px`;
+
+            document.body.appendChild(img);
+
+            // Clean up the DOM after animation finishes
+            setTimeout(() => {
+                img.remove();
+            }, 1500);
+        }
+
+        btn.addEventListener('click', () => {
+            btn.style.display = 'none'; // Hide button after click
+            
+            let count = 0;
+            const interval = setInterval(() => {
+                createBear();
+                count++;
+                
+                // Stop after 100 images
+                if (count >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.querySelector('h1').innerText = "You're my favorite teddy! ❤️";
+                    }, 2000);
+                }
+            }, 1000); // One new bear every second for 100 seconds
+        });
+    </script>
+</body>
+</html>
