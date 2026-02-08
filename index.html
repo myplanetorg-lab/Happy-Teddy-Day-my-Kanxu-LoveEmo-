@@ -20,70 +20,117 @@
             text-align: center;
         }
 
-        h1 { font-size: 2.5rem; text-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
+        #content-wrapper {
+            z-index: 10;
+            max-width: 80%;
+        }
+
+        h1 { font-size: 3rem; margin-bottom: 10px; }
+        p { font-size: 1.2rem; }
 
         #magicButton {
-            padding: 15px 30px;
-            font-size: 1.2rem;
+            padding: 20px 40px;
+            font-size: 1.5rem;
             background-color: #ff385c;
             color: white;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 100;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: 0.3s;
         }
 
+        #magicButton:hover { transform: scale(1.1); }
+
+        /* Larger Image Styling */
         .bear {
             position: absolute;
-            width: 150px;
-            height: 150px;
+            width: 350px; /* Increased size */
+            height: 350px;
             object-fit: cover;
             border-radius: 20px;
-            border: 4px solid white;
-            animation: popOut 2s ease-in-out forwards;
+            border: 8px solid white;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            animation: popOut 2.5s ease-in-out forwards;
+            pointer-events: none;
         }
 
         @keyframes popOut {
-            0% { transform: scale(0) rotate(-20deg); opacity: 0; }
-            50% { transform: scale(1.1) rotate(0deg); opacity: 1; }
-            100% { transform: scale(1) rotate(10deg); opacity: 0; }
+            0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+            20% { transform: scale(1.1) rotate(0deg); opacity: 1; }
+            80% { transform: scale(1.1) rotate(0deg); opacity: 1; }
+            100% { transform: scale(0.8) rotate(15deg); opacity: 0; }
+        }
+
+        #finalMessage {
+            display: none;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid white;
+            animation: fadeIn 2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <h1>Happy Teddy Day my love! 🧸</h1>
-    <p>Since you don't like physical teddies, I made you a digital magic trick.</p>
-    <button id="magicButton" onclick="startMagic()">Wanna see a magic trick?</button>
+    <div id="content-wrapper">
+        <div id="intro">
+            <h1>Happy Teddy Day my love! 🧸</h1>
+            <p>I know you aren't a fan of physical bears, so I made you something else...</p>
+            <button id="magicButton" onclick="startMagic()">Wanna see a magic trick?</button>
+        </div>
+
+        <div id="finalMessage">
+            <h1>To My Favorite Person...</h1>
+            <p>I hope these 100 bears brought a smile to your face. You might not like the fluffy ones you have to keep on a shelf, but I hope you liked these. You're my favorite "bear" to hug, today and every day. Happy Teddy Day!</p>
+        </div>
+    </div>
 
     <script>
         function startMagic() {
-            document.getElementById('magicButton').style.display = 'none';
-            let count = 0;
+            const intro = document.getElementById('intro');
+            const finalMessage = document.getElementById('finalMessage');
+            intro.style.display = 'none';
             
-            // Runs for 100 seconds, one bear per second
+            let count = 1;
+            const totalImages = 100;
+            
             const magicInterval = setInterval(() => {
-                if (count >= 100) {
+                if (count > totalImages) {
                     clearInterval(magicInterval);
+                    // Show message after the last image starts to fade
+                    setTimeout(() => {
+                        finalMessage.style.display = 'block';
+                    }, 2000);
                     return;
                 }
                 
                 const img = document.createElement('img');
-                // Using Picsum for reliable random cute animals
-                img.src = `https://picsum.photos/200/200?random=${Math.random()}`;
+                
+                // This pulls images/1.jpg, images/2.jpg, etc.
+                img.src = `images/${count}.jpg`; 
                 img.className = 'bear';
                 
-                // Random position
-                img.style.left = Math.random() * (window.innerWidth - 150) + 'px';
-                img.style.top = Math.random() * (window.innerHeight - 150) + 'px';
+                // Random position logic
+                const x = Math.random() * (window.innerWidth - 350);
+                const y = Math.random() * (window.innerHeight - 350);
+                
+                img.style.left = x + 'px';
+                img.style.top = y + 'px';
                 
                 document.body.appendChild(img);
                 
-                // Clean up the image after animation ends
-                setTimeout(() => img.remove(), 2000);
+                // Cleanup
+                setTimeout(() => img.remove(), 2500);
                 count++;
-            }, 1000);
+            }, 1000); // 1 image every second
         }
     </script>
 </body>
